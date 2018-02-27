@@ -19,6 +19,7 @@ let stocks = new mongoose.Schema({
 let stockModel = mongoose.model("currentStock", stocks);
 // Socket setup
 io.on('connection',()=>{
+  console.log("User Connected");
   io.on('add stock', (stock)=>{
     console.log(stock);
   })
