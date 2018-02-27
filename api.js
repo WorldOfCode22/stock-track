@@ -18,8 +18,14 @@ let stocks = new mongoose.Schema({
 })
 let stockModel = mongoose.model("currentStock", stocks);
 // Socket setup
+// Socket Connection Event
 io.on('connection',()=>{
   console.log("User Connected");
+  // After connection event emit stock information on current stocks
+  stockModel.findOne()
+  .then((doc)=>{
+    io.sockets.emit("get current stocks", doc.currentStocks);
+  })
   io.on('add stock', (stock)=>{
     console.log(stock);
   })
