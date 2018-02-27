@@ -4,6 +4,7 @@
   "description": "\"An api for stock tracking application\"",
   "main": "api.js",
   "scripts": {
+    "start": "node api.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sloan Gwaltney (worldofcode22@gmail.com)",
