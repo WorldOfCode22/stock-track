@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const port = 4000;
 const mongoose = require('mongoose');
-
+const fetch = require('node-fetch');
 //mongoose setup
 mongoose.connect(process.env.MONGO_URI)
 .then(
@@ -25,8 +25,10 @@ app.get('/stocks/add/:stock',(req,res)=>{
         doc.currentStocks.push(req.params.stock);
         return doc.save();
       }).then((doc)=>{
-        res.json(doc);
-        return doc;
+        return fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${req.params.stock}&apikey=${process.env.STOCK_API}`)
+        .then((data)=>{
+          res.json(data);
+        })
       }).catch((err)=>{res.json({error:err})})
     }else if(count === 0){
       new stockModel({
