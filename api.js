@@ -42,6 +42,33 @@ io.on('connection',(socket)=>{
               .then((data)=>{io.sockets.emit("get current stocks",data)});
     })
   }
+    function isStockInArray(doc, stock){
+      if(doc.currentStocks.indexOf(stock) === -1){
+        return false;
+      }else{
+        io.sockets.emit("ERROR", "Stock Already Created");
+      }
+    }
+    function vaildStock(stock){
+      return fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stock}&apikey=${process.env.STOCK_API}`)
+        .then(res =>{return res.json()})
+        .then(data =>{
+          if(data){
+            return true;
+          }else{
+            io.sockets.emit("ERROR", "Not A Vaild Stock");
+          }
+        })
+        .catch(err=>{console.log(err)})
+    }
+    function addStock(doc, stock){
+      doc.currentStocks.push(stock);
+      return doc
+        .save()
+        .then(doc=>{
+          io.sockets.emit("refresh");
+        })
+    }
   console.log("User Connected");
   // After connection event emit stock information on current stocks
     refresh();
@@ -62,6 +89,23 @@ socket.on("remove stock", (stock)=>{
 })
 socket.on('refresh',()=>{
   refresh();
+})
+socket.on("add stock", (stock)=>{
+  stockModel
+    .findOne()
+    .then(doc =>{
+      if(isStockInArray(doc, stock) === false){
+        console.log("Stock is not in array");
+        vaildStock()
+          .then(bool =>{
+            if(bool){
+              addStock(doc, stock)
+            }else{
+              io.sockets.emit("ERROR", "No Such Stock");
+            }
+          })
+      }
+    })
 })
 })
 

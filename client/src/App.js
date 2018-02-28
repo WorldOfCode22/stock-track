@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import openSocket from 'socket.io-client';
 import StockCard from './components/stock-card';
+import AddCard from './components/add-card';
 class App extends Component {
   constructor(){
     super();
@@ -24,6 +25,7 @@ class App extends Component {
     return (
       <div className="App">
         {this.state.stocks}
+        <AddCard socket={this.state.socket} />
       </div>
     );
   }
