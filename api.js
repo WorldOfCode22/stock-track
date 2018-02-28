@@ -17,17 +17,30 @@ let stocks = new mongoose.Schema({
   currentStocks:Array
 })
 let stockModel = mongoose.model("currentStock", stocks);
+function getDoc(){
+  return stockModel
+          .findOne()
+          .then((doc)=>{
+            return doc;
+          })
+        }
 // Socket setup
 // Socket Connection Event
 io.on('connection',()=>{
   console.log("User Connected");
   // After connection event emit stock information on current stocks
-  stockModel.findOne()
-  .then((doc)=>{
-    io.sockets.emit("get current stocks", doc.currentStocks);
-  })
-  io.on('add stock', (stock)=>{
-    console.log(stock);
+  getDoc()
+    .then((doc)=>{
+      let stockArr = [];
+      for(let i = 0; i < doc.currentStocks.length;i++){
+        stockArr.push(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${doc.currentStocks[i]}&apikey=${process.env.STOCK_API}`)
+      }
+      const grabContent = url => fetch(url)
+        .then((res)=>{return res.json()})
+        .then((data)=>{return data});
+      Promise
+            .all(stockArr.map(grabContent))
+            .then((data)=>{io.sockets.emit("get current stocks",data)});
   })
 })
 
