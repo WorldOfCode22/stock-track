@@ -8,12 +8,15 @@ class App extends Component {
     socket.on("get current stocks", (stocks)=>{
       this.jsxifyStocks(stocks);
     })
+    socket.on("refresh", ()=>{
+      socket.emit("refresh")
+    })
     this.state={socket};
   }
   jsxifyStocks(stockArr){
     let jsxArray = []
     for(let i = 0; i<stockArr.length;i++){
-      jsxArray.push(<StockCard key={i} stock={stockArr[i]} />);
+      jsxArray.push(<StockCard key={i} stock={stockArr[i]} socket={this.state.socket} />);
     }
     this.setState({stocks:jsxArray});
   }

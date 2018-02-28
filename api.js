@@ -26,22 +26,43 @@ function getDoc(){
         }
 // Socket setup
 // Socket Connection Event
-io.on('connection',()=>{
+io.on('connection',(socket)=>{
+  function refresh(){
+    getDoc()
+      .then((doc)=>{
+        let stockArr = [];
+        for(let i = 0; i < doc.currentStocks.length;i++){
+          stockArr.push(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${doc.currentStocks[i]}&apikey=${process.env.STOCK_API}`)
+        }
+        const grabContent = url => fetch(url)
+          .then((res)=>{return res.json()})
+          .then((data)=>{return data});
+        Promise
+              .all(stockArr.map(grabContent))
+              .then((data)=>{io.sockets.emit("get current stocks",data)});
+    })
+  }
   console.log("User Connected");
   // After connection event emit stock information on current stocks
+    refresh();
+socket.on("remove stock", (stock)=>{
+  console.log("Removing stock " + stock);
   getDoc()
     .then((doc)=>{
-      let stockArr = [];
-      for(let i = 0; i < doc.currentStocks.length;i++){
-        stockArr.push(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${doc.currentStocks[i]}&apikey=${process.env.STOCK_API}`)
+      if(doc.currentStocks.indexOf(stock)=== -1){
+        io.sockets.emit("ERROR", "Stock Not In Database Please Refresh Page");
+      }else{
+        doc.currentStocks.splice(doc.currentStocks.indexOf(stock, 1));
+        doc.save()
+        .then(()=>{
+          io.sockets.emit("refresh");
+        })
       }
-      const grabContent = url => fetch(url)
-        .then((res)=>{return res.json()})
-        .then((data)=>{return data});
-      Promise
-            .all(stockArr.map(grabContent))
-            .then((data)=>{io.sockets.emit("get current stocks",data)});
-  })
+    })
+})
+socket.on('refresh',()=>{
+  refresh();
+})
 })
 
 // app deploy
