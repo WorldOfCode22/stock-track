@@ -18,16 +18,24 @@ class App extends Component {
   jsxifyStocks(stockArr){
     let jsxArray = []
     for(let i = 0; i<stockArr.length;i++){
-      jsxArray.push(<StockCard key={i} stock={stockArr[i]} socket={this.state.socket} />);
+      jsxArray.push(<StockCard key={i} stock={stockArr[i]} socket={this.state.socket} color={"grey"} />);
     }
     this.setState({stocks:jsxArray, stockArr});
   }
   render() {
+    let divStyle = {
+      display: "grid",
+      width: "100%",
+      gridTemplateColumns: "repeat(4, 1fr)",
+      gridGap: "10px"
+    }
     return (
       <div className="App">
         <Chart stocks={this.state.stockArr}/>
-        {this.state.stocks}
-        <AddCard socket={this.state.socket} />
+        <div style={divStyle}>
+          <AddCard socket={this.state.socket} color={"grey"} />
+          {this.state.stocks}
+        </div>
       </div>
     );
   }
