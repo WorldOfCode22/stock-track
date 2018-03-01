@@ -17,17 +17,26 @@ export default class Chart extends Component{
       objArray.push(obj);
     }
     console.log(objArray);
+    return objArray;
   }
 }
   setupChart(){
-    let context = document.getElementById("chart");
-    let lineChart = new Graph(context,{
+    console.log(this.formatData())
+    let lineChart = new Graph(document.getElementById('chart'),{
       type: 'line',
-      data: this.props.stocks
-    });
+      data: {
+        labels: this.formatData()[0].x,
+        datasets: [{
+          data: this.formatData()[0].y,
+          label: this.formatData()[0].name
+        }]
+      }
+    })
   }
   render(){
-    this.formatData()
+    if(this.props.stocks){
+    this.setupChart();
+  }
     return(
       <canvas id={"chart"} />
     )
