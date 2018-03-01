@@ -79,7 +79,7 @@ socket.on("remove stock", (stock)=>{
       if(doc.currentStocks.indexOf(stock)=== -1){
         io.sockets.emit("ERROR", "Stock Not In Database Please Refresh Page");
       }else{
-        doc.currentStocks.splice(doc.currentStocks.indexOf(stock, 1));
+        doc.currentStocks.splice(doc.currentStocks.indexOf(stock),1);
         doc.save()
         .then(()=>{
           io.sockets.emit("refresh");
