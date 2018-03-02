@@ -115,5 +115,5 @@ app.get("/",(req,res)=>{
 
 // app deploy
 http.listen(process.env.PORT || port,()=>{
-  console.log(`API waiting for request on port ${process.env.port}`);
+  console.log(`API waiting for request on port ${process.env.PORT}`);
 })
