@@ -114,6 +114,6 @@ app.get("/",(req,res)=>{
 });
 
 // app deploy
-http.listen(port || 8080,()=>{
-  console.log(`API waiting for request on port ${port}`);
+http.listen(process.env.port || port,()=>{
+  console.log(`API waiting for request on port ${process.env.port}`);
 })
