@@ -7,6 +7,7 @@ const port = 4000;
 const mongoose = require('mongoose');
 const fetch = require('node-fetch');
 const io = require('socket.io')(http);
+const path = require('path');
 //mongoose setup
 mongoose.connect(process.env.MONGO_URI)
 .then(
@@ -106,8 +107,13 @@ socket.on("add stock", (stock)=>{
     }).catch(err=>{console.log(err); io.sockets.emit("ERROR", "SERVER ERROR")})
 })
 })
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get("/",(req,res)=>{
+  console.log("what");
+  res.sendFile(path.join(__dirname, '/client/build/index.html'));
+});
 
 // app deploy
-http.listen(port,()=>{
+http.listen(port || 8080,()=>{
   console.log(`API waiting for request on port ${port}`);
 })
