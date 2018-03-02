@@ -5,9 +5,6 @@ export default class Chart extends Component{
     let self = this;
     let obj = {};
     let keys = Object.keys(this.props.stocks[0]["Time Series (Daily)"])
-    function getLabels(){
-      return keys;
-    }
     function formatDatasets(){
       let dataset = [];
       let dataObj = {};
@@ -34,7 +31,7 @@ export default class Chart extends Component{
 }
   setupChart(){
     console.log(this.formatData())
-    let lineChart = new Graph(document.getElementById('chart'),{
+    new Graph(document.getElementById('chart'),{
       type: 'line',
       data: {
         labels: this.formatData().labels,

@@ -6,12 +6,18 @@ export default class StockCard extends Component{
     const divStyle = {
       backgroundColor: this.props.color,
       textAlign: "center",
-      borderRadius: "15px"
+      borderRadius: "15px",
+      opacity: "0.8"
+    }
+    const buttonStyle = {
+      backgroundColor: "red",
+      color:"white",
+      borderRadius:"5px"
     }
     return(
       <div style={divStyle}>
         <h1>{this.props.stock["Meta Data"]["2. Symbol"]}</h1>
-        <button onClick={()=>{this.props.socket.emit("remove stock", this.props.stock["Meta Data"]["2. Symbol"])}}>remove</button>
+        <button style={buttonStyle} onClick={()=>{this.props.socket.emit("remove stock", this.props.stock["Meta Data"]["2. Symbol"]);this.props.func()}}>Remove!</button>
       </div>
     )
   }

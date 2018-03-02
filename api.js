@@ -40,7 +40,7 @@ io.on('connection',(socket)=>{
         Promise
               .all(stockArr.map(grabContent))
               .then((data)=>{io.sockets.emit("get current stocks",data)});
-    })
+    }).catch(err=>{console.log(err);io.sockets.emit("ERROR", "API ERROR")})
   }
     function isStockInArray(doc, stock){
       if(doc.currentStocks.indexOf(stock) === -1){
@@ -53,7 +53,7 @@ io.on('connection',(socket)=>{
       return fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stock}&apikey=${process.env.STOCK_API}`)
         .then(res =>{return res.json()})
         .then(data =>{
-          if(data){
+          if(data["Error Message"] === undefined){
             return true;
           }else{
             io.sockets.emit("ERROR", "Not A Vaild Stock");
@@ -68,12 +68,11 @@ io.on('connection',(socket)=>{
         .then(doc=>{
           io.sockets.emit("refresh");
         })
+        .catch(err=>{console.log(err);io.sockets.emit("ERRER", "SERVER ERROR")})
     }
-  console.log("User Connected");
   // After connection event emit stock information on current stocks
     refresh();
 socket.on("remove stock", (stock)=>{
-  console.log("Removing stock " + stock);
   getDoc()
     .then((doc)=>{
       if(doc.currentStocks.indexOf(stock)=== -1){
@@ -83,7 +82,7 @@ socket.on("remove stock", (stock)=>{
         doc.save()
         .then(()=>{
           io.sockets.emit("refresh");
-        })
+        }).catch(err=>{console.log(err);io.sockets.emit("ERROR", "SERVER ERROR")})
       }
     })
 })
@@ -95,8 +94,7 @@ socket.on("add stock", (stock)=>{
     .findOne()
     .then(doc =>{
       if(isStockInArray(doc, stock) === false){
-        console.log("Stock is not in array");
-        vaildStock()
+        vaildStock(stock)
           .then(bool =>{
             if(bool){
               addStock(doc, stock)
@@ -105,7 +103,7 @@ socket.on("add stock", (stock)=>{
             }
           })
       }
-    })
+    }).catch(err=>{console.log(err); io.sockets.emit("ERROR", "SERVER ERROR")})
 })
 })
 
