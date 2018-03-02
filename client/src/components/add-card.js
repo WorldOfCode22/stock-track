@@ -4,7 +4,8 @@ export default class AddCard extends Component{
   render(){
     let divStyle={
       backgroundColor: this.props.color,
-      textAlign: "center"
+      textAlign: "center",
+      borderRadius: "15px"
     }
     return(
       <div style={divStyle}>

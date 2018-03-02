@@ -5,7 +5,8 @@ export default class StockCard extends Component{
     console.log(this.props);
     const divStyle = {
       backgroundColor: this.props.color,
-      textAlign: "center"
+      textAlign: "center",
+      borderRadius: "15px"
     }
     return(
       <div style={divStyle}>

@@ -18,7 +18,7 @@ class App extends Component {
   jsxifyStocks(stockArr){
     let jsxArray = []
     for(let i = 0; i<stockArr.length;i++){
-      jsxArray.push(<StockCard key={i} stock={stockArr[i]} socket={this.state.socket} color={"grey"} />);
+      jsxArray.push(<StockCard key={i} stock={stockArr[i]} socket={this.state.socket} color={"#DE98B2"} />);
     }
     this.setState({stocks:jsxArray, stockArr});
   }
@@ -33,7 +33,7 @@ class App extends Component {
       <div className="App">
         <Chart stocks={this.state.stockArr}/>
         <div style={divStyle}>
-          <AddCard socket={this.state.socket} color={"grey"} />
+          <AddCard socket={this.state.socket} color={"#DE98B2"} />
           {this.state.stocks}
         </div>
       </div>

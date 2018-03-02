@@ -11,19 +11,25 @@ export default class Chart extends Component{
     function formatDatasets(){
       let dataset = [];
       let dataObj = {};
+      let colors = ["green", "white", "#40e0d0", "#F0E130", "#4169e1", "#ff00ff", "#e6e6fa"]
       for(let i = 0; i < self.props.stocks.length; i++){
         dataObj.label = self.props.stocks[i]["Meta Data"]["2. Symbol"];
         dataObj.data = [];
         keys.forEach(function getVals(c){
-          dataObj.data.push(self.props.stocks[i]["Time Series (Daily)"][c]["2. high"])
+          dataObj.data.push(self.props.stocks[i]["Time Series (Daily)"][c]["2. high"]);
+          //console.log((x+3)%3);
+          dataObj.fill = false;
         })
+        dataObj.borderColor = colors[(i+colors.length)%colors.length];
+        dataObj.backgroundColor = colors[(i+colors.length)%colors.length];
         dataset.push(dataObj);
         dataObj = {};
       }
       return dataset;
     }
-    obj.labels = keys;
+    obj.labels = keys.reverse();
     obj.datasets = formatDatasets();
+    console.log(obj.datasets);
     return obj;
 }
   setupChart(){
@@ -33,6 +39,13 @@ export default class Chart extends Component{
       data: {
         labels: this.formatData().labels,
         datasets: this.formatData().datasets
+      },
+      options: {
+        title: {
+          display: "true",
+          text: "Stocks",
+          fontColor: "white"
+        }
       }
     })
   }
