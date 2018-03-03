@@ -102,7 +102,7 @@ socket.on("add stock", (stock)=>{
             }else{
               io.sockets.emit("ERROR", "No Such Stock");
             }
-          })
+          }).catch(err=>{console.log(err); io.sockets.emit("ERROR", "SERVER ERROR")})
       }
     }).catch(err=>{console.log(err); io.sockets.emit("ERROR", "SERVER ERROR")})
 })

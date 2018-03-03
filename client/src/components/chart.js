@@ -8,7 +8,7 @@ export default class Chart extends Component{
     function formatDatasets(){
       let dataset = [];
       let dataObj = {};
-      let colors = ["green", "white", "#40e0d0", "#F0E130", "#4169e1", "#ff00ff", "#e6e6fa"]
+      let colors = ["green", "#40e0d0", "#F0E130", "#4169e1", "#ff00ff", "#e6e6fa"]
       for(let i = 0; i < self.props.stocks.length; i++){
         dataObj.label = self.props.stocks[i]["Meta Data"]["2. Symbol"];
         dataObj.data = [];
