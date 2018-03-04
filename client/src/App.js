@@ -37,7 +37,7 @@ class App extends Component {
       gridGap: '20px'
     }
     return (
-      <div className="App" className="container" style={{backgroundColor: 'white'}}>
+      <div className="App container" style={{backgroundColor: 'white'}}>
         <header className="jumbotron" style={{backgroundColor:"#7799ff"}}>
           <h1 className="text-center">Stock Tracker</h1>
           <h3 className="text-center">A Chart Displaying A 100 Day History of Closing High</h3>

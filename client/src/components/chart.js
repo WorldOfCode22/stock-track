@@ -48,7 +48,9 @@ export default class Chart extends Component{
   }
   render(){
     if(this.props.stocks){
+    if(this.props.stocks.length > 0){
     this.setupChart();
+  }
   }
     return(
       <canvas id={"chart"} />
