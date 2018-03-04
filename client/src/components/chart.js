@@ -53,7 +53,7 @@ export default class Chart extends Component{
   }
   }
     return(
-      <canvas id={"chart"} />
+      <canvas id='chart' />
     )
   }
 }

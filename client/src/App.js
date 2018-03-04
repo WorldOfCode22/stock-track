@@ -7,7 +7,7 @@ class App extends Component {
   constructor(){
     super();
     this.waitMessage = this.waitMessage.bind(this);
-    let socket = openSocket('');
+    let socket = openSocket('localhost:4000');
     socket.on("get current stocks", (stocks)=>{
       this.jsxifyStocks(stocks);
     })
